@@ -65,7 +65,9 @@ grille<-function(){
 # échanger deux colonnes
 
 echcol<-function(s){
-  b<-c(sample(1:9,2))
+  b<-c(sample(1:3,2))
+  c<-sample(0:2,1)
+  b<-b+3*c
   d<-c()
   e<-c()
  # récupérer les valeurs des deux colonnes dans des vecteurs 
@@ -89,22 +91,24 @@ echcol<-function(s){
 # échanger deux lignes
 
 echrow<-function(s){
+  b<-c(sample(1:3,2))
+  c<-sample(0:2,1)
+  b<-b+3*c
   f<-c()
   g<-c()
-  c<-c(sample(1:9,2))
   # récupérer les valeurs des deux lignes dans des vecteurs
   for(i in 1:9){
-    f[i]<-s[c[1],i]
+    f[i]<-s[b[1],i]
   }
   for(i in 1:9){
-    g[i]<-s[c[2],i]
+    g[i]<-s[b[2],i]
   }
   # remplacer les deux lignes
   for(i in 1:9){
-    s[c[2],i]<-f[i]
+    s[b[2],i]<-f[i]
   }
   for(i in 1:9){
-    s[c[1],i]<-g[i]
+    s[b[1],i]<-g[i]
   }
   s
 }
