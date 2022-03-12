@@ -1,7 +1,7 @@
 library(shiny)
 library(shinydashboard)
 library(shinythemes)
-library(DT)
+library(shinyMatrix)
 
 ##########################################################
 ###################### UI.R #########################
@@ -83,7 +83,7 @@ if (interactive()) {
     
     #Générer un nouveau Sudoku
     observeEvent(input$load,{
-      sudoku <- sudoku_nina() # fonction a changer 
+      sudoku <- grille() 
       output$plot_sudoku <- renderPlot({plot(sudoku)})
       
       #Générer un nouveau Sudoku selon la difficulté
