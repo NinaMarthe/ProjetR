@@ -118,5 +118,3 @@ sudoku<-function(){
   }
   s
 }
-
-
