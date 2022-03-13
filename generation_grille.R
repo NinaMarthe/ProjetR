@@ -1,3 +1,4 @@
+# génération de la grille de sudoku complete
 grille<-function(){
   s<-matrix(, 9, 9) # générer la matrice
   
