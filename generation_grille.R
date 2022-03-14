@@ -1,6 +1,67 @@
+# échanger deux colonnes
+echcol<-function(s){
+  # séléctionner aléatoirement deux colonnes d'un même bloc
+  b<-c(sample(1:3,2))
+  c<-sample(0:2,1)
+  b<-b+3*c
+  d<-c()
+  e<-c()
+  # récupérer les valeurs des deux colonnes dans des vecteurs 
+  for(i in 1:9){
+    d[i]<-s[i,b[1]]
+  }
+  for(i in 1:9){
+    e[i]<-s[i,b[2]]
+  }
+  # remplacer les deux colonnes
+  for(i in 1:9){
+    s[i,b[2]]<-d[i]
+  }
+  for(i in 1:9){
+    s[i,b[1]]<-e[i]
+  }
+  s
+}
+####################################################################################################
+
+# échanger deux lignes
+echrow<-function(s){
+  # séléctionner aléatoirement deux lignes dun même bloc
+  b<-c(sample(1:3,2))
+  c<-sample(0:2,1)
+  b<-b+3*c
+  f<-c()
+  g<-c()
+  # récupérer les valeurs des deux lignes dans des vecteurs
+  for(i in 1:9){
+    f[i]<-s[b[1],i]
+  }
+  for(i in 1:9){
+    g[i]<-s[b[2],i]
+  }
+  # remplacer les deux lignes
+  for(i in 1:9){
+    s[b[2],i]<-f[i]
+  }
+  for(i in 1:9){
+    s[b[1],i]<-g[i]
+  }
+  s
+}
+####################################################################################################
+
+#"mélanger" la grille, effectuer des échanges de lignes et de colonnes
+melange<-function(s){
+  for(i in 1:20){
+    s<-echcol(s)
+    s<-echrow(s)
+  }
+  s
+}
+####################################################################################################
 # génération de la grille de sudoku complete
-grille<-function(){
-  s<-matrix(, 9, 9) # générer la matrice
+grille_complete<-function(){
+  s<-matrix(nrow=9,ncol=9) # générer la matrice
   
   a<- c(sample(1:9,9)) # générer la première ligne
   
@@ -60,66 +121,8 @@ grille<-function(){
     s[9,i]<-s[6,i-1]
   }
   
+  s<-melange(s)
+  
   s 
 }
-
-# échanger deux colonnes
-
-echcol<-function(s){
-  b<-c(sample(1:3,2))
-  c<-sample(0:2,1)
-  b<-b+3*c
-  d<-c()
-  e<-c()
- # récupérer les valeurs des deux colonnes dans des vecteurs 
-  for(i in 1:9){
-    d[i]<-s[i,b[1]]
-  }
-  for(i in 1:9){
-    e[i]<-s[i,b[2]]
-  }
-  # remplacer les deux colonnes
-  for(i in 1:9){
-    s[i,b[2]]<-d[i]
-  }
-  for(i in 1:9){
-    s[i,b[1]]<-e[i]
-  }
-  s
-}
-
-
-# échanger deux lignes
-
-echrow<-function(s){
-  b<-c(sample(1:3,2))
-  c<-sample(0:2,1)
-  b<-b+3*c
-  f<-c()
-  g<-c()
-  # récupérer les valeurs des deux lignes dans des vecteurs
-  for(i in 1:9){
-    f[i]<-s[b[1],i]
-  }
-  for(i in 1:9){
-    g[i]<-s[b[2],i]
-  }
-  # remplacer les deux lignes
-  for(i in 1:9){
-    s[b[2],i]<-f[i]
-  }
-  for(i in 1:9){
-    s[b[1],i]<-g[i]
-  }
-  s
-}
-
-#"mélanger" la grille, effectuer des échanges de lignes et de colonnes
-sudoku<-function(){
-  s<-grille()
-  for(i in 1:10){
-    s<-echcol(s)
-    s<-echrow(s)
-  }
-  s
-}
+####################################################################################################

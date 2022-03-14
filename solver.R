@@ -1,111 +1,75 @@
-sudoku <- matrix( c(NA,NA,NA,NA,NA,6,NA,NA,NA,
-                    NA,9,5,7,NA,NA,3,NA,NA,
-                    4,NA,NA,NA,9,2,NA,NA,5,
-                    7,6,4,NA,NA,NA,NA,NA,3,
-                    NA,NA,NA,NA,NA,NA,NA,NA,NA,
-                    2,NA,NA,NA,NA,NA,9,7,1,
-                    5,NA,NA,2,1,NA,NA,NA,9,
-                    NA,NA,7,NA,NA,5,4,8,NA,
-                    NA,NA,NA,8,NA,NA,NA,NA,NA),
-                  byrow = T, ncol = 9)
+s<-grille_incomplete(50)
 
+####################################################################################################
 
-
-# bloc 1 : isPossible()
-# Détermine si on peut assigner une valeur à la place de NA
-# 3 sous blocs:
-
-# sous-bloc 1 : isInRow()
-isInRow <- function(x, row, num){
-  if(any(x[row, ] ==num, na.rm = TRUE)){
-    return(TRUE)
-  }
-  return(FALSE)
+# renvoie vrai si n est un candidat possible aux coordonées i,j dans la grille s
+candidat<-function(s, i, j, n){
+  ca<-candidats(s)
+  return(n%in%ca[i,j][[1]])
 }
 
+####################################################################################################
 
-# sous-bloc 2: isInCol()
-isInCol <- function(x, col, num){
-  if(any(x[, col] == num, na.rm = TRUE)){
-    return(TRUE)
-  }
-  return(FALSE)
+# rend la liste des candidats de la case de coordonées i,j dans la grille s
+candidatscase<-function(s,i,j){
+  ca<-candidats(s)
+  return(ca[i,j][[1]])
 }
 
+####################################################################################################
 
-# sous-bloc 3 : isInBox()
-isInBox <- function(x, row, col, num){
-  box_row <- ((row -1) %/% 3)*3
-  box_col <- (((col - 1) %/% 3)*3) + 1:3
-  if(any(x[(box_row + 1), box_col] == num, na.rm = TRUE) ||
-     any(x[(box_row + 2), box_col] == num, na.rm = TRUE) ||
-     any(x[(box_row + 3), box_col] == num, na.rm = TRUE)){
-    return(TRUE)
-  }
-  return(FALSE)
-
-}
-
-
-# Mettre tout ensemble : isPossible()
-
-isPossible <- function(x, row, col, num){
-  if(isFALSE(isInRow(x, row, num)) &&
-     isFALSE(isInCol(x, col, num)) &&
-     isFALSE(isInBox(x, row, col, num))){
-
-    return(TRUE)
-  }
-}
-
-# Bloc 2 : possibleNumbers()
-# Récupérer les nombres possibles à mettre
-
-possibleNumbers <- function(x, row, col){
-  n <- 1:9
-  p <- NA
-  for(num in n){
-
-    if(isTRUE(isPossible(x, row, col, num)))
-      p <- append(p, num)
-  }
-  p <- p[complete.cases(p)]
-
-  return(p)
-
-}
-
-# sudoku_solver()
 # fonction complète pour résoudre le sudoku
-
-sudoku_solver <- function(x){
-
-  if(all(!is.na(x))){
-
-    return(x)
-
+solveur <- function(s){
+  
+  if(complete(s)){
+    
+    return(s)
+    
   }
-
-  df <- which(is.na(x), arr.ind = TRUE) # retrouver les valeurs manquantes
-
-  row <- df[1, 1]
-  col <- df[1, 2]
-
-  p <- possibleNumbers(x, row, col)
-
-  for(i in p){
-
-    x[row, col] <- i
-    soluce <- sudoku_solver(x) # fonction récursive --> vérifier l'emplacement des zéros
-
-    if(!is.null(soluce)){# si le nombre isNULL est placé dans la mauvaise case --> essaye un nouveau nombre
-      return(soluce)
+  
+  # récupérer les coordonées des cases vides : 
+  
+  # compter les cases vides pour construire la matrice
+  m<-1
+  for(k in 1:9){
+    for (l in 1:9){
+      if(is.na(s[k,l])){
+        m<-m+1
       }
+    }
   }
-
-  return(NULL)
+  a<-matrix(ncol=2,nrow=m)
+  
+  # remplir la matrice a avec les coordonnées des cases vides
+  m<-1
+  for(k in 1:9){
+    for (l in 1:9){
+      if(is.na(s[k,l])){
+        a[m,1]<-k
+        a[m,2]<-l
+        m<-m+1
+      }
+    }
+  }
+  
+  i <- a[1, 1]
+  j <- a[1, 2]
+  
+  p <- candidatscase(s, i, j)
+  
+  for(n in p){
+    # tester récursivement toutes les possibilités pour la case aux coordonnées i,j, 
+    # jusqu'à en trouver une qui permette d'avoir une grille valide : 
+    
+    s[i, j] <- n
+    solution <- solveur(s) 
+    
+     if(!is.null(solution)){
+      # solveur renvoie null si une case vide n'a aucun candidat, donc si la grille n'est pas valide
+       return(solution)
+     }
+  }
+  
+ return(NULL)
 }
-
-sudoku_solver
-res <- sudoku_solver(sudoku)
-res
+####################################################################################################
