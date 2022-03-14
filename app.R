@@ -3,7 +3,7 @@ library(shinydashboard)
 library(shinythemes)
 library(shinyMatrix)
 source("generation_grille.R")
-source("fonctions.R")
+source("grille_incomplete.R")
 source("solver.R")
 
 ##########################################################
