@@ -2,15 +2,15 @@
 # cases blanches souhaitees
 grille_incomplete<-function(d){
 s<-grille_complete()
-if(d==1){n<-30}
-if(d==2){n<-50}
-if(d==3){n<-70}
+if(d==1){g<-30}
+if(d==2){g<-50}
+if(d==3){g<-70}
 if(d>3){
   print('mauvaise difficulté choisie')
   break()
   }
 
-for(i in 1:n){
+for(i in 1:g){
   a<-c(sample(1:9),2)
   s[a[1],a[2]]<-NA
 }

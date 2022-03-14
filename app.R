@@ -1,91 +1,70 @@
-library(shiny)
-library(shinydashboard)
-library(shinythemes)
-library(shinyMatrix)
-source("generation_grille.R")
-source("fonctions.R")
-source("solver.R")
+shiny::runApp(
+  list(
+    ui = pageWithSidebar(
+      
+      
+      
+      headerPanel("Sudoku"),
+      
+      sidebarPanel(
+        radioButtons(inputId="radio",  #radio pour ne choisir qu'une difficulté à la fois
+                     label ="Difficulté",
+                     choices = c("Facile" = "easy",
+                                 "Moyen" = "medium",
+                                 "Difficile" = "hard"),
+                     selected = "easy"),
+        
+        actionButton(inputId="load", label="Générer un nouveau Sudoku"),
+        hr(),
+        actionButton(inputId="solve", label="Afficher la solution")
+      ),
+      
+      mainPanel(    
+        uiOutput('matrix')     
+      )
+    )
+    , 
+    server = function(input,output){
 
-##########################################################
-###################### UI.R #########################
-##########################################################
+      
+      observeEvent(input$load,{
+        if(input$radio=="easy"){n<-1}
+        if(input$radio=="medium"){n<-2}
+        if(input$radio=="hard"){n<-3}
+        
+        
+        sudoku <- grille_incomplete(n)
+        assign("grille",sudoku,envir = .GlobalEnv)
+       
 
-if (interactive()) {
+        output$matrix <- renderTable({
+          
+          matrix <- sudoku
+          
+        },na="",matrix,rownames = FALSE,colnames = FALSE)
+        
+     
+      })
+      
+      
+      observeEvent(input$solve,{
 
-  ui <- fluidPage(
+        
+        
+        solution <- solveur(grille)
+        
+        
+        output$matrix <- renderTable({
+          
+          matrix <- solution
+          
+        },matrix,rownames = FALSE,colnames = FALSE)
+        
+        
+      })
 
-    titlePanel("Sudoku"),
-
-    dashboardPage(
-      dashboardHeader(),
-      dashboardSidebar(
-        sidebarMenu(
-          radioButtons(inputId="radio",  #radio pour ne choisir qu'une difficulté à la fois
-                       label ="Difficulté",
-                       choices = c("Facile" = "easy",
-                                   "Moyen" = "medium",
-                                   "Difficile" = "hard"),
-                       selected = "easy"),
-          hr(),
-
-          actionButton(inputId="load", label="Générer un nouveau Sudoku", icon = icon("cog")),
-          hr(),
-          actionButton(inputId="solve", label="Solution", icon = icon("check")),
-          hr(),
-
-          menuItem("", icon = icon(""))
-
-        )),
-      dashboardBody(  theme = shinytheme('superhero'),
-                     selectInput("grille",label = '', choices = c(9)),
-                      actionButton("add", "Jouer !"),
-                      uiOutput("grid"),
-
-                      mainPanel(
-                        plotOutput("plot_sudoku"),
-                        plotOutput("plot_solve_sudoku")
-
-                      )
-
-      )))
-
-
-
-  ##########################################################
-  ###################### Server.R #########################
-  ##########################################################
-
-
-  server <- function(input, output, session) {
-
-    # Création de la grille 9x9
-    observe({
-      if(!is.null(input$add)) {
-        m = reactive({ matrix('',
-                              ncol = as.numeric(input$grille),
-                              nrow = as.numeric(input$grille)) })
-        output$grid <- renderUI({
-          div(matrixInput(inputId = "grid", value = m()),)
-        })
-      }
-    })
-
-    #Générer un nouveau Sudoku avec les valeurs manquantes
-    observeEvent(input$load,{
-      sudoku <- grille_complete()
-      output$plot_sudoku <- renderPlot({plot(sudoku)})
-    })
-
-
-    #Générer la solution du Sudoku
-    observeEvent(input$solve,{
-      solution_sudoku <- solveur(s)
-      output$plot_solve_sudoku <- renderPlot({plot(solution_sudoku)})
-
-    })
-
-
-
-  }
-  shinyApp(ui, server)
-}
+      
+     
+    }
+  )
+)
