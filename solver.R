@@ -1,5 +1,3 @@
-s<-grille_incomplete(50)
-
 ####################################################################################################
 
 # renvoie vrai si n est un candidat possible aux coordonées i,j dans la grille s
