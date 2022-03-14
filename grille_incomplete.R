@@ -9,7 +9,6 @@ if(d>3){
   print('mauvaise difficulté choisie')
   break()
   }
-print(n)
 
 for(i in 1:n){
   a<-c(sample(1:9),2)
