@@ -1,3 +1,4 @@
+HEAD
 shiny::runApp(
   list(
     ui = pageWithSidebar(
@@ -25,6 +26,7 @@ shiny::runApp(
     )
     , 
     server = function(input,output){
+
 
       
       observeEvent(input$load,{
