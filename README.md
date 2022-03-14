@@ -2,10 +2,10 @@
 
 Bonjour ! Voici une brève description de notre projet R de l’UE HAX815X Ce projet a pour but de générer aléatoirement des grilles de Sudoku complètes et incomplètes associées à un niveau de difficulté , ainsi que de résoudre des grilles de Sudoku incomplètes
 
-La fonction "grille_complete()" génère une grille de sudoku aléatoire complète.
+La fonction "grille_complete()" génère une grille de sudoku aléatoire complète. \n
 la fonction "grille_incomplete(n)" avec n de 1 à 3 génère une grille de sudoku incomplète aléatoire,
-la valeur dans n représentant la difficulté.
-La fonction "solveur(s)" résoud la grille de sudoku s et renvoie sa solution.
+la valeur dans n représentant la difficulté. \n
+La fonction "solveur(s)" résoud la grille de sudoku s et renvoie sa solution. \n
 
 authors = ("Nina MARTHE", "Elyes BRAHAM")
 
