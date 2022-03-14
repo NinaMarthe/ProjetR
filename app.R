@@ -2,9 +2,9 @@ library(shiny)
 library(shinydashboard)
 library(shinythemes)
 library(shinyMatrix)
-source("C:/Users/33645/Documents/R/ProjetR/generation_grille.R")
-source("C:/Users/33645/Documents/R/ProjetR/fonctions.R")
-source("C:/Users/33645/Documents/R/ProjetR/solver.R")
+source("generation_grille.R")
+source("fonctions.R")
+source("solver.R")
 
 ##########################################################
 ###################### UI.R #########################
@@ -37,7 +37,7 @@ if (interactive()) {
 
         )),
       dashboardBody(  theme = shinytheme('superhero'),
-                      selectInput('grille',label = '', choices = c(9)),
+                     selectInput("grille",label = '', choices = c(9)),
                       actionButton("add", "Jouer !"),
                       uiOutput("grid"),
 
@@ -72,14 +72,14 @@ if (interactive()) {
 
     #Générer un nouveau Sudoku avec les valeurs manquantes
     observeEvent(input$load,{
-      sudoku <- grille2(grille)
+      sudoku <- grille_complete()
       output$plot_sudoku <- renderPlot({plot(sudoku)})
     })
 
 
     #Générer la solution du Sudoku
     observeEvent(input$solve,{
-      solution_sudoku <- sudoku_solver(grille2)
+      solution_sudoku <- solveur(s)
       output$plot_solve_sudoku <- renderPlot({plot(solution_sudoku)})
 
     })
